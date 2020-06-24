@@ -39,9 +39,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         print("sceneWillResignActive call!!")
         
         if #available(iOS 10.0, *){
+            
             UNUserNotificationCenter.current().getNotificationSettings { settings in
+                
                 if settings.authorizationStatus == UNAuthorizationStatus.authorized{
+                    
                     let nContents = UNMutableNotificationContent()
+                    
                     nContents.badge = 1
                     nContents.title = "로컬 알람 메세지"
                     nContents.subtitle = "로컬 알람 메세지~~~"

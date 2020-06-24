@@ -10,14 +10,14 @@ import UIKit
 import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        if #available(iOS 10.0 , *){
+        if #available(iOS 11.0 , *){
             // SingleTon instance
             let notiCenter = UNUserNotificationCenter.current()
             //경고, 배지, 사운드를 사용하는 알림 환경 정보 생성, 사용자 동의 여부 창 실행
@@ -25,13 +25,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 //사용자 동의 후 처리 작업.
                 print("== > \(didAllow)")
             }
+            
+            notiCenter.delegate = self
+            
         } else{
             
         }
         
         return true
     }
+    
+    //앱 실행 도중에 알림 메시지가 도착한 경우
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        if notification.request.identifier == "wakeup" {
+            let userInfo = notification.request.content.userInfo
+            print("==> \(userInfo["name"]!)")
+        }
+        completionHandler([.alert,.badge,.sound])
+    }
 
+    //사용자가 알림 메시지를 클릭할 경우
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        if response.notification.request.identifier == "wakeup" {
+            let userInfo = response.notification.request.content.userInfo
+            print("=====> \(userInfo["name"]!)")
+        }
+        completionHandler()
+    }
+    
+//    func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {
+//        <#code#>
+//    }
+    
     // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
