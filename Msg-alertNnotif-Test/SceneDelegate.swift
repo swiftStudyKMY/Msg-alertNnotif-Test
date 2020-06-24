@@ -66,6 +66,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
         }else{
             //UILocalNotification 객체를 이용한 알림(iOS9이하)
+            let setting = UIApplication.shared.currentUserNotificationSettings
+            
+            //허용 거부시 .none
+            guard setting?.types != .none else {
+                print("can't Schedule")
+                return
+            }
+            
+            let noti = UILocalNotification()
+            noti.fireDate = Date(timeIntervalSinceNow: 10)
+            noti.timeZone = TimeZone.autoupdatingCurrent
+            noti.alertBody = "로컬알람 바디"
+            noti.alertAction = "로컬알람 액션"
+            noti.applicationIconBadgeNumber = 1
+            noti.soundName = UILocalNotificationDefaultSoundName
+            noti.userInfo = ["name":"kmy"]
+            
+            UIApplication.shared.scheduleLocalNotification(noti)
+            
+//            fireDate 무시하고 바로 보내기
+//            UIApplication.shared.presentLocalNotificationNow(<#T##notification: UILocalNotification##UILocalNotification#>)
         }
     }
 

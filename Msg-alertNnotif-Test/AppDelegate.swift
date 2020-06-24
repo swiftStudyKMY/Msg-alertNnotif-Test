@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        if #available(iOS 11.0 , *){
+        if #available(iOS 10.0 , *){
             // SingleTon instance
             let notiCenter = UNUserNotificationCenter.current()
             //경고, 배지, 사운드를 사용하는 알림 환경 정보 생성, 사용자 동의 여부 창 실행
@@ -30,6 +30,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
         } else{
             
+            let setting = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            
+            application.registerUserNotificationSettings(setting)
         }
         
         return true
