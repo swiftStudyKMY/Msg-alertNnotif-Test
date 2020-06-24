@@ -46,33 +46,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
-    func appliactionWillResignActive(_ application: UIApplication){
-        if #available(iOS 10.0, *){
-            UNUserNotificationCenter.current().getNotificationSettings { settings in
-                if settings.authorizationStatus == UNAuthorizationStatus.authorized{
-                    let nContents = UNMutableNotificationContent()
-                    nContents.badge = 1
-                    nContents.title = "로컬 알람 메세지"
-                    nContents.subtitle = "로컬 알람 메세지~~~"
-                    nContents.body = "로컬 알람 메세지~~~~~~123123112312"
-                    nContents.sound = UNNotificationSound.default
-                    nContents.userInfo = ["name":"KMY"]
-                    
-                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-                    
-                    let req = UNNotificationRequest(identifier: "wakeup", content: nContents, trigger: trigger)
-                    
-                    UNUserNotificationCenter.current().add(req)
-                    
-                    
-                }else{
-                    print("사용자가 동의하지 않음.")
-                }
-            }
-        }else{
-            //UILocalNotification 객체를 이용한 알림(iOS9이하)
-        }
-    }
-
 }
 
