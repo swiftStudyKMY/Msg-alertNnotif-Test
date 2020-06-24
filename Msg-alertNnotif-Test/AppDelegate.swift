@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,6 +16,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        if #available(iOS 10.0 , *){
+            // SingleTon instance
+            let notiCenter = UNUserNotificationCenter.current()
+            //경고, 배지, 사운드를 사용하는 알림 환경 정보 생성, 사용자 동의 여부 창 실행
+            notiCenter.requestAuthorization(options: [.alert, .badge, .sound]) { (didAllow, error) in
+                //사용자 동의 후 처리 작업.
+                print("== > \(didAllow)")
+            }
+        } else{
+            
+        }
+        
         return true
     }
 
@@ -32,6 +46,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+    func appliactionWillResignActive(_ application: UIApplication){
+        if #available(iOS 10.0, *){
+            UNUserNotificationCenter.current().getNotificationSettings { settings in
+                if settings.authorizationStatus == UNAuthorizationStatus.authorized{
+                    let nContents = UNMutableNotificationContent()
+                    nContents.badge = 1
+                    nContents.title = "로컬 알람 메세지"
+                    nContents.subtitle = "로컬 알람 메세지~~~"
+                    nContents.body = "로컬 알람 메세지~~~~~~123123112312"
+                    nContents.sound = UNNotificationSound.default
+                    nContents.userInfo = ["name":"KMY"]
+                    
+                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+                    
+                    let req = UNNotificationRequest(identifier: "wakeup", content: nContents, trigger: trigger)
+                    
+                    UNUserNotificationCenter.current().add(req)
+                    
+                    
+                }else{
+                    print("사용자가 동의하지 않음.")
+                }
+            }
+        }else{
+            //UILocalNotification 객체를 이용한 알림(iOS9이하)
+        }
+    }
 
 }
 
