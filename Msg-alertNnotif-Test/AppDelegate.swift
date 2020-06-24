@@ -33,9 +33,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             let setting = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
             
             application.registerUserNotificationSettings(setting)
+            
+            if let localNoti = launchOptions?[UIApplication.LaunchOptionsKey.localNotification] as? UILocalNotification {
+                // 알림으로 앱이 실행 된 경우 알림처리~
+                print((localNoti.userInfo?["name"])!)
+            }
         }
         
         return true
+    }
+    
+    //'UILocalNotification' was deprecated in iOS 10.0: Use UserNotifications Framework's UNNotificationRequest
+    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
+        print("didReceive notification call")
+        
+        print((notification.userInfo?["name"])!)
+        
+        if application.applicationState == UIApplication.State.active {
+            // 활성화 상태
+        }else{
+            // 비활성화 상태
+        }
+        
     }
     
     //앱 실행 도중에 알림 메시지가 도착한 경우
