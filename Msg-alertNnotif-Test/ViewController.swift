@@ -78,16 +78,55 @@ class ViewController: UIViewController {
             tf.isSecureTextEntry = true
         }
 
-        
-        
-        
         present(alert1, animated: false)
-        
 
+    }
+    
+    @IBAction func authBtn(_ sender: Any) {
+        
+        let msg = "로그인"
+        let alert = UIAlertController(title: nil, message: msg, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        let ok = UIAlertAction(title: "확인", style: .default) { (_) in
+            
+            let loginId = alert.textFields?[0].text
+            let loginPw = alert.textFields?[1].text
+            
+            if loginId == "muziq43" && loginPw == "1111" {
+                self.res.text = "인증 성공."
+            }else{
+                self.res.text = "인증 실패."
+            }
+            
+        }
+        
+        alert.addAction(cancel)
+        alert.addAction(ok)
+        
+//        alert.addTextField { (tf) in
+//            tf.placeholder = "아이디"
+//            tf.isSecureTextEntry = false
+//        }
+        
+        alert.addTextField { (tf:UITextField) in
+            tf.placeholder = "아이디"
+            tf.isSecureTextEntry = false
+        }
         
         
+//        alert.addTextField { (tf) in
+//            tf.placeholder = "비밀번호"
+//            tf.isSecureTextEntry = true
+//        }
+        
+        alert.addTextField { $0.placeholder = "비밀번호"
+            $0.isSecureTextEntry = true
+        }
+        
+        self.present(alert, animated: false, completion: nil)
         
     }
+    
     
     
 }
